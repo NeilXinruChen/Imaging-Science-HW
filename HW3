@@ -1,0 +1,41 @@
+% first iteration of Guass Newton Approach
+InitialGuess = [1;1;1];
+myShortAnswer1 = 'Define what metric you are using for your objective function.'
+
+% Compute initial residual
+t=[0;1;2;3;4];
+y=[3.0;2.7;1.3;0.7;0.1];
+InitialResidual = y-exp(t.^2+t)
+
+% Compute Least Square Solution
+t=[0;1;2;3;4];
+y=[3.0;2.7;1.3;0.7;0.1];
+x0=[1;1;1];
+jacobian=-[exp(x0(2)*t.^2+x0(3)*t), x0(1)*t.^2.*exp(x0(2)*t.^2+x0(3)*t), x0(1)*t.*exp(x0(2)*t.^2+x0(3)*t)]
+LeastSquareSolution = jacobian\(-InitialResidual)
+
+% Compute Normal Eqn Solution
+NormalEqnSoln       = (jacobian'*jacobian)\(jacobian'*-InitialResidual)
+
+% Compute QR Solution
+[Q R]=qr(jacobian);
+QRSoln              =    R\(Q'*-InitialResidual)
+myShortAnswer2 = 'Compare QR factorization vs normal equations. What are potential advantages and disadvantages of both approaches ?'; 
+
+% hand coded Guass Newton solver
+convergence = 1.0;
+tolerance = 7.e-2;                                                                                    
+x = InitialGuess;
+while (convergence > tolerance)
+  % update solution
+  residual = y -x(1)*exp(x(2)*t.^2+x(3)*t);
+  jacobian=-[exp(x(2)*t.^2+x(3)*t), x(1)*t.^2.*exp(x(2)*t.^2+x(3)*t), x(1)*t.*exp(x(2)*t.^2+x(3)*t)];
+  [Q R]=qr(jacobian);
+  s=R\(Q'*-residual);
+  x = x+s;
+  convergence=0.5*(residual'*residual)；
+end
+
+myShortAnswer3 = 'What algorithm did you use ? What properties led to your algorithm selection ?'; 
+
+myShortAnswer4 = "What is your convergence rate ? How does it compare to lsqnonlin?"
