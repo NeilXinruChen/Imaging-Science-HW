@@ -30,8 +30,12 @@ while (convergence > tolerance)
   % update solution
   residual = y -x(1)*exp(x(2)*t.^2+x(3)*t);
   jacobian=-[exp(x(2)*t.^2+x(3)*t), x(1)*t.^2.*exp(x(2)*t.^2+x(3)*t), x(1)*t.*exp(x(2)*t.^2+x(3)*t)];
-  [Q R]=qr(jacobian);
-  s=R\(Q'*-residual);
+  
+  % QR method
+  %[Q R]=qr(jacobian);
+  %s=R\(Q'*-residual);
+  
+  s=jacobian\-residual;
   x = x+s;
   convergence=0.5*(residual'*residual)；
 end
